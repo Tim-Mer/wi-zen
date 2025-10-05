@@ -17,7 +17,7 @@ else()
 endif()
 set(sdkVersion 2.2.0)
 set(toolchainVersion 14_2_Rel1)
-set(picotoolVersion 2.2.0)
+set(picotoolVersion 2.2.0-a4)
 set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
 if (EXISTS ${picoVscode})
     include(${picoVscode})
@@ -28,25 +28,35 @@ set(PICO_BOARD pico2_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(blink C CXX ASM)
+project(test C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(blink
-    blink.c
-    )
+add_executable(test test.c )
 
-# pull in common dependencies
-target_link_libraries(blink pico_stdlib)
+pico_set_program_name(test "test")
+pico_set_program_version(test "0.1")
 
-if (PICO_CYW43_SUPPORTED)
-    target_link_libraries(blink pico_cyw43_arch_none)
-endif()
+# Modify the below lines to enable/disable output over UART/USB
+pico_enable_stdio_uart(test 0)
+pico_enable_stdio_usb(test 0)
 
-# create map/bin/hex file etc.
-pico_add_extra_outputs(blink)
+# Add the standard library to the build
+target_link_libraries(test
+        pico_stdlib)
 
-# add url via pico_set_program_url
+# Add the standard include files to the build
+target_include_directories(test PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
+)
+
+# Add any user requested libraries
+target_link_libraries(test 
+        
+        )
+
+pico_add_extra_outputs(test)
+
