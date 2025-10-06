@@ -20,3 +20,12 @@ Mode 2 would send the image over to the pico to run on the physical device
 Create a grid on which can draw, Drawing only occurs with a "pen" that can move in x/y direction. Similar to etchasketch
 
 Can have manual control on the "pen"
+
+
+
+
+# Windows usb to wsl help
+
+usbipd list
+usbipd bind --busid 1-4
+usbipd attach --wsl --busid 1-4
